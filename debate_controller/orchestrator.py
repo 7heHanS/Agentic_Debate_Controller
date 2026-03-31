@@ -134,15 +134,12 @@ class DebateOrchestrator:
                 })
 
             # ── 2) 반대측에 찬성 발언 교차 주입 ──────────────────
-            if self.turn == 1:
-                # 첫 턴: 찬성측 발언 + 반박 요청
-                inject_text = (
-                    f"{pro_response}\n\n"
-                    f"위 찬성 입장에 대해 반박하며, 당신의 반대 입장을 개진해 주세요."
-                )
-                self.agent_con.add_message("user", inject_text)
-            else:
-                self.agent_con.add_message("user", pro_response)
+            # ── 2) 반대측에 찬성 발언 교차 주입 ──────────────────
+            inject_con = (
+                f"[상대방(찬성측)의 발언]\n{pro_response}\n\n"
+                f"위 상대방의 주장에 논리적으로 반박하며, 당신의 '반대' 입장을 개진해 주세요."
+            )
+            self.agent_con.add_message("user", inject_con)
 
             # ── 3) 반대측 발언 ──────────────────────────────────
             con_response, con_thinking = self.ui.stream_response(
@@ -162,7 +159,11 @@ class DebateOrchestrator:
                 })
 
             # ── 4) 찬성측에 반대 발언 교차 주입 ──────────────────
-            self.agent_pro.add_message("user", con_response)
+            inject_pro = (
+                f"[상대방(반대측)의 발언]\n{con_response}\n\n"
+                f"위 상대방의 주장에 논리적으로 반박하며, 당신의 '찬성' 입장을 개진해 주세요."
+            )
+            self.agent_pro.add_message("user", inject_pro)
 
             # ── 5) 중재자(Judge) 개입 ───────────────────────────
             if self.turn % JUDGE_INTERVAL == 0 and self.turn < self.max_turns:

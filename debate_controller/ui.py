@@ -72,7 +72,7 @@ class DebateUI:
         content_text = ""
         thinking_text = ""
 
-        with Live(console=self.console, refresh_per_second=8) as live:
+        with Live(console=self.console, refresh_per_second=8, transient=True) as live:
             # think=False: thinking 비활성화 → num_predict 토큰 전부 응답에 사용
             stream = agent.generate_with_retry(options, think=False)
             for chunk in stream:
