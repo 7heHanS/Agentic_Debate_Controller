@@ -23,6 +23,7 @@ from .config import (
     SLIDING_WINDOW_KEEP,
     TEMPERATURE,
     USE_SUMMARY,
+    REPETITION_PENALTY,
 )
 from .context_manager import ContextManager
 from .exporter import export_debate, export_debug_log
@@ -97,6 +98,7 @@ class DebateOrchestrator:
             "temperature": self.temperature,
             "num_predict": MAX_RESPONSE_TOKENS,
             "num_ctx": CONTEXT_WINDOW_SIZE,
+            "repeat_penalty": REPETITION_PENALTY,
         }
 
         while self.turn < self.max_turns:
